@@ -1,10 +1,13 @@
 <template>
+  <div v-if="gameStatus === 1">Вы выиграли , хорош играть !!! Игра начинается с начала</div>
   <div>Уровень: {{level}}</div>
-  <div class= 'board'>
+  <div 
+    class= 'board'
+    :style="{width: 50 * size + 'px', height: 50 * size + 'px'}">
     <BoardItem 
       v-for="(cell, index) in cells" 
       :key="cell + '-' + index" 
-      :icon="cell"
+      :icon-id="cell"
       :selected='cheakRoad(index)'
       :closed ='isRoadClosed(index)'
       @mousedown="mouseDown(index)"
@@ -31,7 +34,9 @@ export default {
     const path = ref([])
     const size = ref(4)
     const closedPath = ref([])
-    const level = 1
+    let level = ref(1)
+    let maxVelel = 3
+    let gameStatus = ref(0) // 0 -play 1 - win
 
     const mouseDown = (index) =>{
       path.value = []
@@ -79,8 +84,20 @@ export default {
       })
 
       if(completed){
-        alert('Вы выиграли')
+        goToNextLevel()
       }
+    }
+
+    const goToNextLevel = () =>{
+      level.value +=1
+      gameStatus.value = 0
+
+      if(level.value > maxVelel ){
+        level.value = 1
+        gameStatus.value = 1
+      }
+
+      start(level.value)
     }
 
     const cheakRoad = (index) =>{
@@ -94,23 +111,28 @@ export default {
     const start = (level) =>{
       if (level === 1){
         cells.value = [3,0,0,2,3,0,1,0,2,0,1,0,0,0,0,0]
+        size.value = 4
 
       }
 
       if(level === 2){
         cells.value = [1,0,0,2,3,0,1,0,2,0,3,0,0,0,0,0]
-  
+        size.value = 4
       }
 
-       size.value = 4
+      if(level === 3){
+        cells.value = [0,0,0,0,0,3,4,0,1,0,4,0,3,0,2,0,0,1,0,0,0,0,2,0,0]
+        size.value = 5
+      }
+
        path.value =[]
        closedPath.value =[]
     }
 
-    start()
+    start(level.value)
 
     const reload = () =>{
-      start(level)
+      start(level.value)
     }
 
     return{
@@ -121,7 +143,9 @@ export default {
       cheakRoad,
       isRoadClosed,
       level, 
-      reload
+      reload,
+      size,
+      gameStatus
     }
   }
 }

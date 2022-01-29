@@ -3,7 +3,7 @@
     + (selected ? ' active' : '' ) 
     + (closed ? ' closed' : '') 
     ">
-    <li v-if="icon" :class="'icon icon-' + icon "> </li>
+    <li v-if="iconId" :class="'icon icon-' + iconId "> </li>
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 export default {  
   name:'BoardItem',
   props:{
-    icon:{
+    iconId:{
       type: Number,
       required: false,
       default: 0
@@ -70,6 +70,12 @@ export default {
 
 .icon-3{
   background-image: url('../assets/icon__eat.png');
+  background-size: 50px 50px;
+  background-position: 100px 0;
+}
+
+.icon-4{
+  background-image: url('../assets/icon__love.png');
   background-size: 50px 50px;
   background-position: 100px 0;
 }
